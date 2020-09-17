@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        marginVertical: 4
+        marginVertical: 4,
+        fontFamily:'Courgette'
     },
     price: {
         fontSize:14,

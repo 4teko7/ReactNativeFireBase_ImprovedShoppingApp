@@ -1,7 +1,7 @@
 import * as Font from 'expo-font';
 
 //Fetching Fonts
-export default loadFonts = async (setFontLoaded) => {
+const loadFonts = async (setFontLoaded) => {
     await Font.loadAsync({
         "Yanone":require('../assets/fonts/YanoneKaffeesatz-VariableFont_wght.ttf'),
         "PlayfairDisplay":require('../assets/fonts/PlayfairDisplay-Italic-VariableFont_wght.ttf'),
@@ -17,3 +17,5 @@ export default loadFonts = async (setFontLoaded) => {
     });
     setFontLoaded(true);
 }
+
+export default loadFonts;
