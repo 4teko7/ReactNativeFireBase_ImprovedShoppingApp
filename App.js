@@ -1,10 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet} from 'react-native';
 import loadFonts from './utils/loadFonts';
 import Loading from './components/Loading';
 
 import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
+
+//REDUX
+import {createStore , combineReducers } from 'redux';
+import {Provider} from 'react-redux';
+import productsReducer from './store/reducers/products';
+
+
+//Navigator
+import ShopNavigator from './navigation/ShopNavigator';
+
+const rootReducer = combineReducers({
+  products: productsReducer
+});
+
+const store = createStore(rootReducer);
+
 
 const beforeStarting = (setFontLoaded) => {
   loadFonts(setFontLoaded);
@@ -12,17 +28,15 @@ const beforeStarting = (setFontLoaded) => {
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
-  console.log("fontLoaded ",fontLoaded);
   beforeStarting(setFontLoaded)
 
   if(!fontLoaded) return <Loading textStyle={{fontSize:20}} size={40}/>
 
   
   return (
-    <View style={styles.container}>
-      <Text style={{fontFamily:"Courgette"}}>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+   <Provider store={store}>
+     <ShopNavigator />
+   </Provider>
   );
 }
 
