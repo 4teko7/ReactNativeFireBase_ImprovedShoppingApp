@@ -7,6 +7,7 @@ import { createAppContainer } from "react-navigation";
 //Screens
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductsDetailScreen';
+import CartScreen from '../screens/shop/CartScreen';
 
 
 //Constants
@@ -41,7 +42,8 @@ const defaultStackNavOption = {
 const ProductsNavigator = createStackNavigator(
 {
     ProductsOverviewScreen: ProductsOverviewScreen,
-    ProductDetailScreen: ProductDetailScreen
+    ProductDetailScreen: ProductDetailScreen,
+    CartScreen: CartScreen
 },
 {
     mode: "modal",
