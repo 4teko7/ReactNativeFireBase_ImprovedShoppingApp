@@ -4,7 +4,10 @@ import {Text,Platform} from 'react-native';
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 
+//Screens
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
+import ProductDetailScreen from '../screens/shop/ProductsDetailScreen';
+
 
 //Constants
 import Colors from "../constants/Colors";
@@ -37,7 +40,8 @@ const defaultStackNavOption = {
 
 const ProductsNavigator = createStackNavigator(
 {
-    ProductsOverviewScreen: ProductsOverviewScreen
+    ProductsOverviewScreen: ProductsOverviewScreen,
+    ProductDetailScreen: ProductDetailScreen
 },
 {
     mode: "modal",

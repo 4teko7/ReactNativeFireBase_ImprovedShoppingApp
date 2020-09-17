@@ -6,7 +6,7 @@ export const PRODUCTS = [
         'u1',
         'White Shirt',
         'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.Oo6ToV_YHssDuDnmm8PCFAHaHa%26pid%3DApi&f=1',
-        'A White T-Shirt, perfect fro days with non-white whether',
+        'A White T-Shirt, perfect fro days with non-white whether. This is my favorite...',
         29.99
     ),
     new Product(

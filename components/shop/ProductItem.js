@@ -1,21 +1,33 @@
 import React from 'react';
-import {View,Text,Image,StyleSheet,Button} from 'react-native';
+import {View,Text,Image,StyleSheet,Button,TouchableOpacity,TouchableNativeFeedback, Platform} from 'react-native';
 import Colors from '../../constants/Colors';
 
 const ProductItem = props => {
 
+    let TouchableCmp = TouchableOpacity;
+
+    if(Platform.OS === 'android' && Platform.Version >= 21){
+        TouchableCmp = TouchableNativeFeedback;
+    }
+
     return (
         <View style = {styles.product}>
-            <View style={styles.parenOfImage}>
-                <Image source={{uri: props.image}} style={styles.image}/>
-            </View>
-            <View style={styles.detail}>
-                <Text style={styles.title}>{props.title}</Text>
-                <Text style={styles.price}>${props.price.toFixed(2)}</Text>
-            </View>
-            <View style={styles.action}>
-                <Button color={Colors.primary} title="View Details" onPress={props.onViewDetail} />
-                <Button color={Colors.primary} title="To Cart" onPress={props.onAddToCart} />
+            <View style={styles.touchable}>
+                <TouchableCmp useForeground onPress={props.onViewDetail}>
+                    <View>
+                        <View style={styles.parenOfImage}>
+                            <Image source={{uri: props.image}} style={styles.image}/>
+                        </View>
+                        <View style={styles.detail}>
+                            <Text style={styles.title}>{props.title}</Text>
+                            <Text style={styles.price}>${props.price.toFixed(2)}</Text>
+                        </View>
+                        <View style={styles.action}>
+                            <Button color={Colors.primary} title="View Details" onPress={props.onViewDetail} />
+                            <Button color={Colors.primary} title="To Cart" onPress={props.onAddToCart} />
+                        </View>
+                    </View>
+                </TouchableCmp>
             </View>
         </View>
     );
@@ -33,6 +45,9 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         height: 300,
         margin:20,
+    },
+    touchable: {
+        borderRadius:10,
         overflow:"hidden"
 
     },
