@@ -3,12 +3,13 @@
     "name": "ImprovedShopApp",
     "slug": "ImprovedShopApp",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "orientation": "default",
+    "icon": "./assets/shop.png",
+    "sdkVersion":"38.0.0",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/shop.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#99ff66"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,10 +18,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bilaltekin.shopping",
+      "buildNumber": "1.0.0"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/shop.png"
+    },
+    "android": {
+      "package": "com.bilaltekin.shopping",
+      "versionCode": 1
     }
   }
 }
