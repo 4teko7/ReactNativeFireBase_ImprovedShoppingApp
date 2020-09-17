@@ -1,4 +1,4 @@
-// import React from 'react';
+// // import React from 'react';
 // import {View} from 'react-native';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { render } from 'react-dom';

@@ -4,12 +4,15 @@ import { StyleSheet, Text, View } from 'react-native';
 import loadFonts from './utils/loadFonts';
 import Loading from './components/Loading';
 
+import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
+
 const beforeStarting = (setFontLoaded) => {
-  loadFonts(setFontLoaded)
+  loadFonts(setFontLoaded);
 }
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);
+  console.log("fontLoaded ",fontLoaded);
   beforeStarting(setFontLoaded)
 
   if(!fontLoaded) return <Loading textStyle={{fontSize:20}} size={40}/>
@@ -29,6 +32,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily:'Courgette'
   },
 });
+
+
+{/* <FontAwesome icon={SolidIcons.spinner} size={30} />
+<FontAwesome icon={RegularIcons.smileWink} />
+<FontAwesome icon={BrandIcons.github} /> */}
