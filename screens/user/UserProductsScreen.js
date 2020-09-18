@@ -26,8 +26,11 @@ const UserProductsScreen = (props) => {
         });
     };
 
-    const onEditHandler = () => {
-
+    const onEditHandler = (productId,title) => {
+        props.navigation.navigate('EditProductScreen',{
+            productId: productId,
+            title: title
+        })
     }
 
     const onDeleteHandler = (productId) => {
@@ -53,7 +56,7 @@ const UserProductsScreen = (props) => {
                 color={Colors.primary}
                 title="Edit"
                 onPress={() => {
-                onEditHandler
+                onEditHandler(itemData.item.id,itemData.item.title);
                 }}
             />
             <Button
@@ -83,6 +86,19 @@ UserProductsScreen.navigationOptions = (navData) => {
                 }}
                 />
             </HeaderButtons>
+        ),
+        headerRight: () => (
+                <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                  <Item
+                    title="Create"
+                    iconName={
+                      Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
+                    }
+                    onPress={() => {
+                      navData.navigation.navigate('EditProductScreen')
+                    }}
+                  />
+                </HeaderButtons>
         )
     }
 }
