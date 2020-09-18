@@ -6,6 +6,11 @@ import CartItem from "../../components/shop/CartItem";
 import * as cartActions from "../../store/actions/cart";
 import * as orderActions from '../../store/actions/orders';
 
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+
+//Components
+import CustomHeaderButton from "../../components/UI/HeaderButton";
+
 const CartScreen = (props) => {
   const dispatch = useDispatch();
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
@@ -56,6 +61,12 @@ const CartScreen = (props) => {
     </View>
   );
 };
+
+CartScreen.navigationOptions = navData => {
+  return {
+    headerTitle: "Your Cart"
+  }
+}
 
 const styles = StyleSheet.create({
   screen: {

@@ -12,7 +12,7 @@ import {Provider} from 'react-redux';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import orderReducer from './store/reducers/orders';
-import {composeWithDevTools} from 'redux-devtools-extension';
+// import {composeWithDevTools} from 'redux-devtools-extension';
 
 //Navigator
 import ShopNavigator from './navigation/ShopNavigator';
@@ -20,10 +20,11 @@ import ShopNavigator from './navigation/ShopNavigator';
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
-  order: orderReducer
+  orders: orderReducer
 });
 
-const store = createStore(rootReducer,composeWithDevTools()); //RemoveThisWhenProductionOccurs
+// const store = createStore(rootReducer,composeWithDevTools()); //RemoveThisWhenProductionOccurs
+const store = createStore(rootReducer); //RemoveThisWhenProductionOccurs
 
 
 const beforeStarting = (setFontLoaded) => {
