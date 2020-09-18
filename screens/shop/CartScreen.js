@@ -19,14 +19,14 @@ const CartScreen = (props) => {
         sum: state.cart.items[key].sum,
       });
     }
-    return transformedCartItems;
+    return transformedCartItems.sort((a,b) => a.productId > b.productId ? 1 : -1);
   });
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
           Total:
-          <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
+          <Text style={styles.amount}>${(cartTotalAmount.toFixed(2) * 1000) / 1000}</Text>
         </Text>
         <Button title="Order Now" disabled={cartItems.length === 0} />
       </View>

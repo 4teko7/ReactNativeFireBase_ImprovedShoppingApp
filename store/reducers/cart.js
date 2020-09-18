@@ -31,19 +31,19 @@ export default (state = initialState, action) => {
                 totalAmount: totalAmount + productPrice
             }
         case REMOVE_FROM_CART:
+            const product = state.items[action.productId];
             const quantity = state.items[action.productId].quantity
-            let price;
+            let price = state.items[action.productId].price;
             let updatedCart;
             totalAmount = state.totalAmount;
             if(quantity > 1){
-                price = state.items[action.productId].price;
                 state.items[action.productId].quantity--;
                 updatedCart = state.items;
             }else{
                 updatedCart = {...state.items}
-                price = updatedCart[action.productId];
                 delete updatedCart[action.productId];
             }
+            console.log(totalAmount,price)
             return {
                 ...state,
                 items: updatedCart,
