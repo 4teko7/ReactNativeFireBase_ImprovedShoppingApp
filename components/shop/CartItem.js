@@ -12,12 +12,13 @@ const CartItem = (props) => {
   return (
     <View style={styles.cartItem}>
       <Text style={styles.itemData}>
-        <Text style={styles.quantity}>{props.quantity}</Text>{" "}
+        <Text style={styles.quantity}>{props.quantity} -  </Text>
         <Text style={styles.text}>{props.title}</Text>
       </Text>
       <View style={styles.itemData}>
         <Text style={styles.text}>${props.amount.toFixed(2)}</Text>
-        <TouchableOpacity
+        {props.deletable && (
+          <TouchableOpacity
           onPress={props.onRemove}
           style={StyleSheet.deleteButton}
         >
@@ -27,6 +28,7 @@ const CartItem = (props) => {
             color="red"
           />
         </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
   },
   quantity: {
     color: "#888",
-    fontSize: 16,
+    fontSize: 16
   },
   text: {
     fontFamily: "Courgette",
