@@ -41,7 +41,11 @@ const CartScreen = (props) => {
         <Button
           title="Order Now"
           disabled={cartItems.length === 0}
-          onPress={() => dispatch(orderActions.addOrder(cartItems, cartTotalAmount))}
+          onPress={() => {
+            dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
+            props.navigation.navigate('OrdersScreen')
+          }
+          }
         />
       </View>
       <FlatList
