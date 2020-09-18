@@ -15,7 +15,7 @@ export const updateProduct = (id, title, imageUrl, price, description) => {
             title: title,
             imageUrl: imageUrl,
             price: price,
-            desciprtion: description
+            description: description
         },
     };
 };
@@ -27,7 +27,7 @@ export const createProduct = (title, imageUrl, price, description) => {
       title: title,
       imageUrl: imageUrl,
       price: price,
-      desciprtion: description,
+      description: description,
     },
   };
 };

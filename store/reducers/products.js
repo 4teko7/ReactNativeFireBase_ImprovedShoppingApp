@@ -61,6 +61,8 @@ export default (state = initialState, action) => {
             price,
             description
         );
+        state.availableProducts[productIndex] = editedProduct;
+        state.userProducts[productIndex] = editedProduct;
         return {
             ...state,
             availableProducts: [...state.availableProducts],

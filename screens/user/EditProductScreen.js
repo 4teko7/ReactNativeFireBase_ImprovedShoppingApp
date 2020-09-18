@@ -15,7 +15,6 @@ import * as productActions from "../../store/actions/products";
 //Components
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 
-
 const EditProductScreen = (props) => {
   const dispatch = useDispatch();
   const productId = props.navigation.getParam("productId");
@@ -30,6 +29,7 @@ const EditProductScreen = (props) => {
     product ? product.description : ""
   );
 
+
   const onSubmitHandler = useCallback(() => {
     dispatch(
       product
@@ -42,7 +42,8 @@ const EditProductScreen = (props) => {
           )
         : productActions.createProduct(title, imageUrl, +price, description)
     );
-  }, [dispatch,productId,title,imageUrl,price,description]);
+    props.navigation.goBack();
+  }, [dispatch, productId, title, imageUrl, price, description]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler });
@@ -56,7 +57,9 @@ const EditProductScreen = (props) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChangeText={(text) => {setTitle(text);}}
+            onChangeText={(text) => {
+              setTitle(text);
+            }}
           />
         </View>
         <View style={styles.formControl}>
@@ -64,7 +67,9 @@ const EditProductScreen = (props) => {
           <TextInput
             style={styles.input}
             value={imageUrl}
-            onChangeText={(text) => {setImageUrl(text)}}
+            onChangeText={(text) => {
+              setImageUrl(text);
+            }}
           />
         </View>
         <View style={styles.formControl}>
@@ -72,7 +77,9 @@ const EditProductScreen = (props) => {
           <TextInput
             style={styles.input}
             value={price}
-            onChangeText={(text) => {setPrice(text)}}
+            onChangeText={(text) => {
+              setPrice(text);
+            }}
           />
         </View>
         <View style={styles.formControl}>
@@ -80,7 +87,9 @@ const EditProductScreen = (props) => {
           <TextInput
             style={styles.input}
             value={description}
-            onChangeText={(text) => {setDescription(text)}}
+            onChangeText={(text) => {
+              setDescription(text);
+            }}
           />
         </View>
       </View>
