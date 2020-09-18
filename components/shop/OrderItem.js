@@ -20,7 +20,6 @@ const OrderItem = (props) => {
       </View>
       {showDetails && (
           <View key={props.date}>
-              {/* {props.items.map(cartt=>console.log(cartt))} */}
             {props.items.map((cartItem) => {
               let id = 0;
               return <CartItem

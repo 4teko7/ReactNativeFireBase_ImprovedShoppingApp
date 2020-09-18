@@ -23,9 +23,6 @@ const ProductDetailScreen = (props) => {
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
 
-  console.log("title", props.navigation.getParam("productTitle"));
-  console.log(selectedProduct);
-  console.log(productId);
   return (
     <ScrollView>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />

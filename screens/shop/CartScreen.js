@@ -43,7 +43,7 @@ const CartScreen = (props) => {
           disabled={cartItems.length === 0}
           onPress={() => {
             dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
-            props.navigation.navigate('OrdersScreen')
+            // props.navigation.navigate('OrdersScreen')
           }
           }
         />

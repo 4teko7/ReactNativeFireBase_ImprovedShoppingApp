@@ -12,7 +12,7 @@ const CartItem = (props) => {
   return (
     <View style={styles.cartItem}>
       <Text style={styles.itemData}>
-        <Text style={styles.quantity}>{props.quantity} -  </Text>
+        <Text style={styles.quantity}>{props.quantity} x  </Text>
         <Text style={styles.text}>{props.title}</Text>
       </Text>
       <View style={styles.itemData}>
