@@ -4,6 +4,9 @@ import ProductItem from "../../components/shop/ProductItem";
 import { useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
+import {useDispatch} from 'react-redux';
+import * as productActions from '../../store/actions/products';
+
 //Components
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 
@@ -11,59 +14,60 @@ import CustomHeaderButton from "../../components/UI/HeaderButton";
 import Colors from '../../constants/Colors';
 
 const UserProductsScreen = (props) => {
-  const userProducts = useSelector((state) => {
-    return state.products.userProducts;
-  });
-
-  const onSelectHandler = (id, title) => {
-    props.navigation.navigate("ProductDetailScreen", {
-      productId: id,
-      productTitle: title,
+    const dispatch = useDispatch();
+    const userProducts = useSelector((state) => {
+        return state.products.userProducts;
     });
-  };
 
-  const onEditHandler = () => {
+    const onSelectHandler = (id, title) => {
+        props.navigation.navigate("ProductDetailScreen", {
+        productId: id,
+        productTitle: title,
+        });
+    };
 
-  }
+    const onEditHandler = () => {
 
-  const onDeleteHandler = () => {
+    }
 
-  }
+    const onDeleteHandler = (productId) => {
+        dispatch(productActions.deleteProduct(productId));
+    }
 
-  return (
-    <FlatList
-      data={userProducts}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => (
-        <ProductItem
-            image={itemData.item.imageUrl}
-            title={itemData.item.title}
-            price={itemData.item.price}
-            onViewDetail={() => {
-                onSelectHandler(itemData.item.id, itemData.item.title);
+    return (
+        <FlatList
+        data={userProducts}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => (
+            <ProductItem
+                image={itemData.item.imageUrl}
+                title={itemData.item.title}
+                price={itemData.item.price}
+                onViewDetail={() => {
+                    onSelectHandler(itemData.item.id, itemData.item.title);
+                }
             }
-        }
-        >
+            >
 
-        <Button
-            color={Colors.primary}
-            title="Edit"
-            onPress={() => {
-              onEditHandler
-            }}
-          />
-          <Button
-            color={Colors.primary}
-            title="Delete"
-            onPress={() => {
-                onDeleteHandler
-            }}
-          />  
+            <Button
+                color={Colors.primary}
+                title="Edit"
+                onPress={() => {
+                onEditHandler
+                }}
+            />
+            <Button
+                color={Colors.primary}
+                title="Delete"
+                onPress={() => {
+                    onDeleteHandler(itemData.item.id)
+                }}
+            />  
 
-        </ProductItem>
-      )}
-    />
-  );
+            </ProductItem>
+        )}
+        />
+    );
 };
 
 UserProductsScreen.navigationOptions = (navData) => {
