@@ -2,7 +2,7 @@ import React,{useReducer,useEffect} from 'react';
 import {View,Text,TextInput,StyleSheet} from 'react-native';
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
-const INPUT_BLUR = 'INPUT_BLUR';
+const INPUT_END_EDITING = 'INPUT_END_EDITING';
 
 const inputReducer = (state,action) => {
     switch(action.type){
@@ -12,7 +12,11 @@ const inputReducer = (state,action) => {
                 value: action.value,
                 isValid: action.isValid
             }
-
+        case INPUT_END_EDITING:
+            return {
+                ...state,
+                isValid: action.isValid
+            }
         default:
             return state;
     }
@@ -21,7 +25,6 @@ const inputReducer = (state,action) => {
 
 
 const MyInput = props => {
-    console.log("MY INPUT")
     const {label,name,errorText,onInputChange,initialValue,initiallyValid} = props;
 
     const [inputState,dispatchInputState] = useReducer(inputReducer,{
@@ -40,6 +43,15 @@ const MyInput = props => {
         })
     }
 
+    const onEndEditingHandler = text => {
+        if(text.nativeEvent.text.length === 0){
+            dispatchInputState({
+                type: INPUT_END_EDITING,
+                isValid: false
+            })
+        }
+    }
+
     useEffect(()=>{
         onInputChange(name,inputState.value,inputState.isValid);
     },[inputState,onInputChange])
@@ -52,8 +64,9 @@ const MyInput = props => {
             style={styles.input}
             value={inputState.value}
             onChangeText={onInputChangeHandler}
+            onEndEditing={onEndEditingHandler}
           />
-          {!inputState.isValid && <Text>{errorText}</Text>}
+          {!inputState.isValid && <Text style={styles.errorText}>{errorText}</Text>}
         </View>
     );
 
@@ -72,6 +85,11 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderBottomColor: "#ccc",
         borderBottomWidth: 1,
+      },
+      errorText: {
+          fontFamily:'fa-brands-400',
+          color:'red',
+          fontSize:12
       }
 })
 

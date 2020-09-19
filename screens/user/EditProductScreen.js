@@ -69,7 +69,6 @@ const EditProductScreen = (props) => {
   );
 
   const onInputChange = useCallback((inputIdentifier, inputValue,inputValidity) => {
-    console.log("inputIdentifier : " , inputIdentifier);
     dispatchFormState({
       type: FORM_INPUT_UPDATE,
       value: inputValue,
@@ -79,10 +78,6 @@ const EditProductScreen = (props) => {
   },[dispatchFormState]);
 
   const onSubmitHandler = useCallback(() => {
-    console.log("BILGI : ",formState.inputValues.title)
-    console.log("BILGI : ",formState.inputValues.imageUrl)
-    console.log("BILGI : ",formState.inputValues.price)
-    console.log("BILGI : ",formState.inputValues.description)
     if (!formState.isFormValid) {
       Alert.alert("Wrong Input !", "Please check Errors in the form !", [
         { text: "Okay", style: "default" },
@@ -127,7 +122,7 @@ const EditProductScreen = (props) => {
             // onInputChange={onInputChangeHandler.bind(this, 'title')}
             onInputChange={onInputChange}
             initialValue={product ? product.title : ''}
-            initiallyValid={!!product}
+            initiallyValid={true}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
@@ -139,7 +134,7 @@ const EditProductScreen = (props) => {
             name='imageUrl'
             onInputChange={onInputChange}
             initialValue={product ? product.imageUrl : ''}
-            initiallyValid={!!product}
+            initiallyValid={true}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
@@ -151,7 +146,7 @@ const EditProductScreen = (props) => {
             name='price'
             onInputChange={onInputChange}
             initialValue={product ? product.price + "" : ''}
-            initiallyValid={!!product}
+            initiallyValid={true}
             keyboardType="decimal-pad"
             autoCapitalize="sentences"
             autoCorrect
@@ -163,7 +158,7 @@ const EditProductScreen = (props) => {
             name='description'
             onInputChange={onInputChange}
             initialValue={product ? product.description : ''}
-            initiallyValid={!!product}
+            initiallyValid={true}
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
