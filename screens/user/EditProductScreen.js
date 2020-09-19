@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useReducer } from "react";
 import {
   View,
   Text,
-  Button,
   ScrollView,
   TextInput,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -15,35 +15,99 @@ import * as productActions from "../../store/actions/products";
 //Components
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 
+const FORM_INPUT_UPDATE = "REDUCER_UPDATE";
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updateValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedIsFormValid = true;
+    for (let key in updateValidities) {
+      if (!key) {
+        updatedIsFormValid = false;
+        break;
+      }
+    }
+    return {
+      isFormValid: updatedIsFormValid,
+      inputValues: updatedValues,
+      inputValidities: updateValidities,
+    };
+  }
+};
+
 const EditProductScreen = (props) => {
   const dispatch = useDispatch();
+
+  const [fornState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      title: product ? product.title : "",
+      imageUrl: product ? product.imageUrl : "",
+      price: product ? product.price + "" : "",
+      description: product ? product.description : "",
+    },
+    inputValidities: {
+      title: product ? true : false,
+      imageUrl: product ? true : false,
+      price: product ? true : false,
+      description: product ? true : false,
+    },
+    isFormValid: product ? true : false,
+  });
   const productId = props.navigation.getParam("productId");
   const product = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === productId)
   );
 
-  const [title, setTitle] = useState(product ? product.title : "");
-  const [imageUrl, setImageUrl] = useState(product ? product.imageUrl : "");
-  const [price, setPrice] = useState(product ? product.price + "" : "");
-  const [description, setDescription] = useState(
-    product ? product.description : ""
-  );
-
+  const onFormChangeHandler = (inputIdentifier, text) => {
+    let isValid = false;
+    if (text.length > 0) {
+      isValid = true;
+    }
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      value: text,
+      isValid: isValid,
+      input: inputIdentifier,
+    });
+  };
 
   const onSubmitHandler = useCallback(() => {
+    if (!fornState.isFormValid) {
+      Alert.alert("Wrong Input !", "Please check Errors in the form !", [
+        { text: "Okay", style: "default" },
+      ]);
+      return;
+    }
+
     dispatch(
       product
         ? productActions.updateProduct(
             productId,
-            title,
-            imageUrl,
-            +price,
-            description
+            fornState.inputValues.title,
+            fornState.inputValues.imageUrl,
+            +fornState.inputValues.price,
+            fornState.inputValues.description
           )
-        : productActions.createProduct(title, imageUrl, +price, description)
+        : productActions.createProduct(
+            fornState.inputValues.title,
+            fornState.inputValues.imageUrl,
+            +fornState.inputValues.price,
+            fornState.inputValues.description
+          )
     );
     props.navigation.goBack();
-  }, [dispatch, productId, title, imageUrl, price, description]);
+  }, [
+    dispatch,
+    productId,
+    fornState
+  ]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler });
@@ -56,49 +120,47 @@ const EditProductScreen = (props) => {
           <Text style={styles.label}>Title</Text>
           <TextInput
             style={styles.input}
-            value={title}
-            onChangeText={(text) => {
-              setTitle(text);
-            }}
-            keyboardType='default'
-            autoCapitalize='sentences'
+            value={fornState.inputValues.title}
+            onChangeText={onFormChangeHandler.bind(this, "title")}
+            keyboardType="default"
+            autoCapitalize="sentences"
             autoCorrect
-            returnKeyType='next'
-            onEndEditing={(text) => {console.log(text.nativeEvent.text)}}
+            returnKeyType="next"
+            // onEndEditing={(text) => {console.log(text.nativeEvent.text)}}
           />
+          {!fornState.inputValidities.title && <Text>Please enter a valid title !</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
           <TextInput
             style={styles.input}
-            value={imageUrl}
-            onChangeText={(text) => {
-              setImageUrl(text);
-            }}
+            value={fornState.inputValues.imageUrl}
+            onChangeText={onFormChangeHandler.bind(this, "imageUrl")}
             keyboardType="default"
           />
+          {!fornState.inputValidities.imageUrl && <Text>Please enter a valid Image Url !</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Price</Text>
           <TextInput
             style={styles.input}
-            value={price}
-            onChangeText={(text) => {
-              setPrice(text);
-            }}
+            value={fornState.inputValues.price}
+            onChangeText={onFormChangeHandler.bind(this, "price")}
             keyboardType="decimal-pad"
           />
+          {!fornState.inputValidities.price && <Text>Please enter a valid Price !</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={styles.input}
-            value={description}
-            onChangeText={(text) => {
-              setDescription(text);
-            }}
+            value={fornState.inputValues.description}
+            onChangeText={onFormChangeHandler.bind(this, "description")}
             keyboardType="default"
           />
+          {!fornState.inputValidities.description && (
+            <Text>Please enter a valid Description !</Text>
+          )}
         </View>
       </View>
     </ScrollView>
