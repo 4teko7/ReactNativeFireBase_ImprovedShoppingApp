@@ -1,6 +1,13 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect,useCallback } from "react";
 
-import { FlatList, Text, Platform,Button } from "react-native";
+import {
+  FlatList,
+  View,
+  Text,
+  Platform,
+  Button,
+  StyleSheet,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -8,30 +15,36 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 //Components
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
-import Loading from '../../components/Loading';
+import Loading from "../../components/Loading";
 
 //Constants
-import Colors from '../../constants/Colors';
+import Colors from "../../constants/Colors";
 
 //Store
 import * as cartActions from "../../store/actions/cart";
-import * as productActions from '../../store/actions/products';
+import * as productActions from "../../store/actions/products";
 
 const ProductsOverviewScreen = (props) => {
-  const [areProductsLoaded,setAreProductsLoaded] = useState(false);
+  const [areProductsLoaded, setAreProductsLoaded] = useState(false);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.availableProducts);
 
-  useEffect(()=>{
 
-    const loadProducts = async () => {
-      setAreProductsLoaded(false)
-      await dispatch(productActions.fetchProducts())
-      setAreProductsLoaded(true)
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setAreProductsLoaded(false);
+    try {
+      await dispatch(productActions.fetchProducts());
+    } catch (err) {
+      setError(err.message);
     }
-    loadProducts();
+    setAreProductsLoaded(true);
+  },[dispatch,setAreProductsLoaded,setError]);
 
-  },[dispatch])
+  useEffect(() => {
+    loadProducts();
+  }, [dispatch,loadProducts]);
 
   const onSelectHandler = (id, title) => {
     props.navigation.navigate("ProductDetailScreen", {
@@ -40,7 +53,26 @@ const ProductsOverviewScreen = (props) => {
     });
   };
 
-  if(!areProductsLoaded) return <Loading textStyle={{fontSize:20}} size={40} color={'green'}/>
+  if (!areProductsLoaded)
+    return <Loading textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
+
+  if (error) {
+    return (
+      <View style={{...styles.centered}}>
+          <View style={{width:"80%",margin:20}}>
+            <Text style={{textAlign:"center",fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>Something Went Wrong ! : {error}</Text>
+          </View>
+          <Button title="try again" color={Colors.primary} onPress={loadProducts} />
+      </View>
+    )
+  }
+
+  if (areProductsLoaded && products.length === 0)
+    return (
+        <View style={{ ...styles.centered}}>
+          <Text style={{fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>No Products Found ! Maybe Start Adding Some Products...</Text>
+        </View>
+    );
 
   return (
     <FlatList
@@ -102,5 +134,13 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default ProductsOverviewScreen;

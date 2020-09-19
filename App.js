@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import loadFonts from './utils/loadFonts';
 import Loading from './components/Loading';
 
