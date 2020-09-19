@@ -3,9 +3,9 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -113,63 +113,65 @@ const EditProductScreen = (props) => {
   }, [onSubmitHandler]); //Only Executes One.
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <MyInput
-            label="title"
-            errorText="Please enter a valid Title !"
-            name="title"
-            // onInputChange={onInputChangeHandler.bind(this, 'title')}
-            onInputChange={onInputChange}
-            initialValue={product ? product.title : ''}
-            initiallyValid={true}
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
-            returnKeyType="next"
-        />
-        <MyInput
-            label="Image URL"
-            errorText="Please enter a valid Image Url !"
-            name='imageUrl'
-            onInputChange={onInputChange}
-            initialValue={product ? product.imageUrl : ''}
-            initiallyValid={true}
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
-            returnKeyType="next"
-        />
-        <MyInput
-            label="Price"
-            errorText="Please enter a valid Price!"
-            name='price'
-            onInputChange={onInputChange}
-            initialValue={product ? product.price + "" : ''}
-            initiallyValid={true}
-            keyboardType="decimal-pad"
-            autoCapitalize="sentences"
-            autoCorrect
-            returnKeyType="next"
-        />
-        <MyInput
-            label="Description"
-            errorText="Please enter a valid Description!"
-            name='description'
-            onInputChange={onInputChange}
-            initialValue={product ? product.description : ''}
-            initiallyValid={true}
-            keyboardType="default"
-            autoCapitalize="sentences"
-            autoCorrect
-            multiline
-            numberOfLines={3}
-            // returnKeyType="next"
-            // onEndEditing={(text) => {console.log(text.nativeEvent.text)}}
+    <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={150}>
+      <ScrollView>
+        <View style={styles.form}>
+          <MyInput
+              label="title"
+              errorText="Please enter a valid Title !"
+              name="title"
+              // onInputChange={onInputChangeHandler.bind(this, 'title')}
+              onInputChange={onInputChange}
+              initialValue={product ? product.title : ''}
+              initiallyValid={true}
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="next"
+          />
+          <MyInput
+              label="Image URL"
+              errorText="Please enter a valid Image Url !"
+              name='imageUrl'
+              onInputChange={onInputChange}
+              initialValue={product ? product.imageUrl : ''}
+              initiallyValid={true}
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="next"
+          />
+          <MyInput
+              label="Price"
+              errorText="Please enter a valid Price!"
+              name='price'
+              onInputChange={onInputChange}
+              initialValue={product ? product.price + "" : ''}
+              initiallyValid={true}
+              keyboardType="decimal-pad"
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="next"
+          />
+          <MyInput
+              label="Description"
+              errorText="Please enter a valid Description!"
+              name='description'
+              onInputChange={onInputChange}
+              initialValue={product ? product.description : ''}
+              initiallyValid={true}
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              multiline
+              numberOfLines={3}
+              // returnKeyType="next"
+              // onEndEditing={(text) => {console.log(text.nativeEvent.text)}}
 
-        />
-      </View>
-    </ScrollView>
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
