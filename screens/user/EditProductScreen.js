@@ -16,7 +16,7 @@ import * as productActions from "../../store/actions/products";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import MyInput from '../../components/UI/Input';
 
-const FORM_INPUT_UPDATE = "REDUCER_UPDATE";
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -29,15 +29,15 @@ const formReducer = (state, action) => {
       [action.inputIdentifier]: action.isValid,
     };
 
-    let updatedIsFormValid = true;
+    let isUpdatedFormValid = true;
     for (let key in updateValidities) {
       if (!updateValidities[key]) {
-        updatedIsFormValid = false;
+        isUpdatedFormValid = false;
         break;
       }
     }
     return {
-      isFormValid: updatedIsFormValid,
+      isFormValid: isUpdatedFormValid,
       inputValues: updatedValues,
       inputValidities: updateValidities,
     };
@@ -68,7 +68,7 @@ const EditProductScreen = (props) => {
     state.products.userProducts.find((prod) => prod.id === productId)
   );
 
-  const onInputChangeHandler = useCallback((inputIdentifier, inputValue,inputValidity) => {
+  const onInputChange = useCallback((inputIdentifier, inputValue,inputValidity) => {
     console.log("inputIdentifier : " , inputIdentifier);
     dispatchFormState({
       type: FORM_INPUT_UPDATE,
@@ -125,7 +125,7 @@ const EditProductScreen = (props) => {
             errorText="Please enter a valid Title !"
             name="title"
             // onInputChange={onInputChangeHandler.bind(this, 'title')}
-            onInputChange={onInputChangeHandler}
+            onInputChange={onInputChange}
             initialValue={product ? product.title : ''}
             initiallyValid={!!product}
             keyboardType="default"
@@ -137,7 +137,7 @@ const EditProductScreen = (props) => {
             label="Image URL"
             errorText="Please enter a valid Image Url !"
             name='imageUrl'
-            onInputChange={onInputChangeHandler}
+            onInputChange={onInputChange}
             initialValue={product ? product.imageUrl : ''}
             initiallyValid={!!product}
             keyboardType="default"
@@ -149,7 +149,7 @@ const EditProductScreen = (props) => {
             label="Price"
             errorText="Please enter a valid Price!"
             name='price'
-            onInputChange={onInputChangeHandler}
+            onInputChange={onInputChange}
             initialValue={product ? product.price + "" : ''}
             initiallyValid={!!product}
             keyboardType="decimal-pad"
@@ -161,7 +161,7 @@ const EditProductScreen = (props) => {
             label="Description"
             errorText="Please enter a valid Description!"
             name='description'
-            onInputChange={onInputChangeHandler}
+            onInputChange={onInputChange}
             initialValue={product ? product.description : ''}
             initiallyValid={!!product}
             keyboardType="default"
@@ -169,7 +169,7 @@ const EditProductScreen = (props) => {
             autoCorrect
             multiline
             numberOfLines={3}
-            returnKeyType="next"
+            // returnKeyType="next"
             // onEndEditing={(text) => {console.log(text.nativeEvent.text)}}
 
         />

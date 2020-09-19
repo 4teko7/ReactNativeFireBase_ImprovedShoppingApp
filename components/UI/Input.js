@@ -12,11 +12,7 @@ const inputReducer = (state,action) => {
                 value: action.value,
                 isValid: action.isValid
             }
-        case INPUT_BLUR:
-            return {
-                ...state,
-                isTouched: true
-            }
+
         default:
             return state;
     }
@@ -31,12 +27,8 @@ const MyInput = props => {
     const [inputState,dispatchInputState] = useReducer(inputReducer,{
         value: initialValue ? initialValue : '',
         isValid: initiallyValid ? true : false,
-        isTouched: false
     }) 
 
-    const onInputBlurHandler = () => {
-        dispatchInputState({type: INPUT_BLUR})
-    }
     const onInputChangeHandler = text => {
         let isValid = false;
         if(text.length > 0) isValid = true;
@@ -49,8 +41,7 @@ const MyInput = props => {
     }
 
     useEffect(()=>{
-        if(inputState.isTouched)
-            onInputChange(name,inputState.value,inputState.isValid);
+        onInputChange(name,inputState.value,inputState.isValid);
     },[inputState,onInputChange])
 
     return (
@@ -61,7 +52,6 @@ const MyInput = props => {
             style={styles.input}
             value={inputState.value}
             onChangeText={onInputChangeHandler}
-            onBlur={onInputBlurHandler}
           />
           {!inputState.isValid && <Text>{errorText}</Text>}
         </View>
