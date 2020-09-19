@@ -3,12 +3,12 @@ import {Text,View,StyleSheet,ActivityIndicator} from 'react-native';
 import {absoluteCenter} from '../DATABASE';
 
 
-export default function LoadingSpinner(props) {
-    const {parentStyle,textStyle,size,color} = props;
+const Loading = (props) => {
+    const {parentStyle,textStyle,size,color,info} = props;
     return (
         <View style={{...styles.loadingDiv,...parentStyle}}>
             <ActivityIndicator size={size} color={color}/>
-            <Text style={textStyle}>Loading</Text>
+            <Text style={textStyle}>{info}</Text>
         </View>
 
 
@@ -26,3 +26,5 @@ const styles = StyleSheet.create({
         zIndex:9999
       }
 });
+
+export default Loading;

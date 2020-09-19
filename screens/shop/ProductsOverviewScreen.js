@@ -65,7 +65,7 @@ const ProductsOverviewScreen = (props) => {
   };
 
   if (!areProductsLoaded)
-    return <Loading textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
+    return <Loading info={'Please Wait. Products are almost ready'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
 
   if (error) {
     return (
