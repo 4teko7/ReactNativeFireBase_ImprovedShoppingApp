@@ -60,6 +60,11 @@ const EditProductScreen = (props) => {
             onChangeText={(text) => {
               setTitle(text);
             }}
+            keyboardType='default'
+            autoCapitalize='sentences'
+            autoCorrect
+            returnKeyType='next'
+            onEndEditing={(text) => {console.log(text.nativeEvent.text)}}
           />
         </View>
         <View style={styles.formControl}>
@@ -70,6 +75,7 @@ const EditProductScreen = (props) => {
             onChangeText={(text) => {
               setImageUrl(text);
             }}
+            keyboardType="default"
           />
         </View>
         <View style={styles.formControl}>
@@ -80,6 +86,7 @@ const EditProductScreen = (props) => {
             onChangeText={(text) => {
               setPrice(text);
             }}
+            keyboardType="decimal-pad"
           />
         </View>
         <View style={styles.formControl}>
@@ -90,6 +97,7 @@ const EditProductScreen = (props) => {
             onChangeText={(text) => {
               setDescription(text);
             }}
+            keyboardType="default"
           />
         </View>
       </View>
