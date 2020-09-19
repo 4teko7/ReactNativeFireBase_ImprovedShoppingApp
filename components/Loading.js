@@ -4,10 +4,10 @@ import {absoluteCenter} from '../DATABASE';
 
 
 export default function LoadingSpinner(props) {
-    const {parentStyle,textStyle,size} = props;
+    const {parentStyle,textStyle,size,color} = props;
     return (
         <View style={{...styles.loadingDiv,...parentStyle}}>
-            <ActivityIndicator size={size} />
+            <ActivityIndicator size={size} color={color}/>
             <Text style={textStyle}>Loading</Text>
         </View>
 

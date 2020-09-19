@@ -7,11 +7,12 @@ import Loading from './components/Loading';
 import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-fontawesome';
 
 //REDUX
-import {createStore , combineReducers } from 'redux';
+import {createStore , combineReducers,applyMiddleware } from 'redux';
 import {Provider} from 'react-redux';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import orderReducer from './store/reducers/orders';
+import ReduxThunk from 'redux-thunk';
 // import {composeWithDevTools} from 'redux-devtools-extension';
 
 //Navigator
@@ -24,7 +25,7 @@ const rootReducer = combineReducers({
 });
 
 // const store = createStore(rootReducer,composeWithDevTools()); //RemoveThisWhenProductionOccurs
-const store = createStore(rootReducer); //RemoveThisWhenProductionOccurs
+const store = createStore(rootReducer,applyMiddleware(ReduxThunk)); //RemoveThisWhenProductionOccurs
 
 
 const beforeStarting = (setFontLoaded) => {
