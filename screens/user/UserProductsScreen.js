@@ -1,5 +1,5 @@
-import React from "react";
-import { FlatList, Platform, Button, Alert } from "react-native";
+import React,{useState,useCallback} from "react";
+import { FlatList, Text, View, Platform, Button, Alert,StyleSheet } from "react-native";
 import ProductItem from "../../components/shop/ProductItem";
 import { useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -9,12 +9,15 @@ import * as productActions from "../../store/actions/products";
 
 //Components
 import CustomHeaderButton from "../../components/UI/HeaderButton";
+import Loading from "../../components/Loading";
 
 //Constants
 import Colors from "../../constants/Colors";
 
 const UserProductsScreen = (props) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const userProducts = useSelector((state) => {
     return state.products.userProducts;
   });
@@ -33,6 +36,19 @@ const UserProductsScreen = (props) => {
     });
   };
 
+
+  const deleteProduct = useCallback(async (productId) => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(productActions.deleteProduct(productId));
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  },[dispatch,setIsLoading,setError]);
+
+
   const onDeleteHandler = (productId) => {
     Alert.alert(
       "Are you sure ?",
@@ -43,12 +59,34 @@ const UserProductsScreen = (props) => {
           text: "Yes",
           style: "destructive",
           onPress: () => {
-            dispatch(productActions.deleteProduct(productId));
+            deleteProduct(productId);
           },
         },
       ]
     );
   };
+
+
+
+
+
+
+
+  if (isLoading)
+    return <Loading info={'Please Wait. Process is almost completed...'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
+
+
+  if (!isLoading && error) {
+    return (
+      <View style={{...styles.centered}}>
+          <View style={{width:"80%",margin:20}}>
+            <Text style={{textAlign:"center",fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>Something Went Wrong ! : {error}</Text>
+          </View>
+          <Button title="try again" color={Colors.primary} onPress={deleteProduct} />
+      </View>
+    )
+  }
+
 
   return (
     <FlatList
@@ -112,5 +150,13 @@ UserProductsScreen.navigationOptions = (navData) => {
     ),
   };
 };
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default UserProductsScreen;

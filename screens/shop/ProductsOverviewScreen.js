@@ -26,7 +26,7 @@ import * as productActions from "../../store/actions/products";
 
 const ProductsOverviewScreen = (props) => {
   const [areProductsLoaded, setAreProductsLoaded] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.availableProducts);
 

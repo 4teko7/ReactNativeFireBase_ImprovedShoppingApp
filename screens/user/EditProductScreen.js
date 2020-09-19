@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  Button,
   KeyboardAvoidingView,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,6 +17,7 @@ import * as productActions from "../../store/actions/products";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import MyInput from "../../components/UI/Input";
 import Loading from "../../components/Loading";
+import Colors from '../../constants/Colors';
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -48,6 +50,7 @@ const formReducer = (state, action) => {
 const EditProductScreen = (props) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -84,6 +87,7 @@ const EditProductScreen = (props) => {
 
   const updateAndEditProduct = useCallback(async () => {
     setIsLoading(true);
+    setError(null)
     try {
       await dispatch(
         product
@@ -103,11 +107,7 @@ const EditProductScreen = (props) => {
       );
       props.navigation.goBack();
     } catch (err) {
-      Alert.alert(
-        "Something Went Wrong!",
-        "Your Product Couldn't be Added. Please Try Again...",
-        [{ text: "Okay", style: "default" }]
-      );
+      setError("Your Product Couldn't be Added. Please Try Again...")
     }
     setIsLoading(false);
   }, [dispatch, productId, formState, setIsLoading]);
@@ -128,6 +128,17 @@ const EditProductScreen = (props) => {
 
   if (isLoading)
     return <Loading info={'Please Wait. Almost Completed...'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
+
+  if (!isLoading && error) {
+    return (
+      <View style={{...styles.centered}}>
+          <View style={{width:"80%",margin:20}}>
+            <Text style={{textAlign:"center",fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>Something Went Wrong ! : {error}</Text>
+          </View>
+          <Button title="try again" color={Colors.primary} onPress={updateAndEditProduct} />
+      </View>
+    )
+  }
 
   return (
     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={150}>
@@ -213,6 +224,11 @@ EditProductScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   form: {
     margin: 20,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

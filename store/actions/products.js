@@ -17,6 +17,8 @@ export const fetchProducts = () => {
       }
 
       const resData = await response.json();
+      if(!resData) throw new Error("Something Went Wrong! Please Try Again...");
+
       const loadedProducts = [];
 
       for (let key in resData) {
@@ -47,8 +49,7 @@ export const deleteProduct = (productId) => {
         {
           method: "DELETE"
         }
-      );
-
+      )
     dispatch({ type: DELETE_PRODUCT, productId: productId });
     } catch (err) {
       throw err;
@@ -59,7 +60,7 @@ export const deleteProduct = (productId) => {
 export const updateProduct = (id, title, imageUrl, price, description) => {
   return async (dispatch) => {
     try {
-      await fetch(
+      const response = await fetch(
         `https://reactnativeimprovedshopapp.firebaseio.com/products/${id}.json`,
         {
           method: "PATCH",
@@ -74,6 +75,9 @@ export const updateProduct = (id, title, imageUrl, price, description) => {
           }),
         }
       );
+
+      const resData = await response.json();
+      if(!resData) throw new Error("Something Went Wrong! Please Try Again...");
 
       dispatch({
         type: UPDATE_PRODUCT,
@@ -112,6 +116,7 @@ export const createProduct = (title, imageUrl, price, description) => {
       );
 
       const resData = await response.json();
+      if(!resData) throw new Error("Something Went Wrong! Please Try Again...");
 
       dispatch({
         type: CREATE_PRODUCT,
