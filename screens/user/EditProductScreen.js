@@ -85,7 +85,13 @@ const EditProductScreen = (props) => {
     [dispatchFormState]
   );
 
-  const updateAndEditProduct = useCallback(async () => {
+  const onSubmitHandler = useCallback(async () => {
+    if (!formState.isFormValid) {
+      Alert.alert("Wrong Input !", "Please check Errors in the form !", [
+        { text: "Okay", style: "default" },
+      ]);
+      return;
+    }
     setIsLoading(true);
     setError(null)
     try {
@@ -112,16 +118,7 @@ const EditProductScreen = (props) => {
     setIsLoading(false);
   }, [dispatch, productId, formState, setIsLoading]);
 
-  const onSubmitHandler = useCallback(() => {
-    if (!formState.isFormValid) {
-      Alert.alert("Wrong Input !", "Please check Errors in the form !", [
-        { text: "Okay", style: "default" },
-      ]);
-      return;
-    }
-    updateAndEditProduct();
-  }, [updateAndEditProduct]);
-
+  
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler });
   }, [onSubmitHandler]); //Only Executes One.
