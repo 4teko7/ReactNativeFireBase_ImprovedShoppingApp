@@ -3,6 +3,7 @@ import { FlatList, Text, View, Platform, Button, Alert,StyleSheet } from "react-
 import ProductItem from "../../components/shop/ProductItem";
 import { useSelector } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import {Ionicons} from '@expo/vector-icons';
 
 import { useDispatch } from "react-redux";
 import * as productActions from "../../store/actions/products";
@@ -142,12 +143,14 @@ UserProductsScreen.navigationOptions = (navData) => {
         <Item
           title="Create"
           iconName={
-            Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
+            Platform.OS === "android" ? "md-add" : "ios-add"
           }
           onPress={() => {
             navData.navigation.navigate("EditProductScreen");
           }}
         />
+
+        {/* <Ionicons name="ios-add" size={24} color="black" /> */}
       </HeaderButtons>
     ),
   };
