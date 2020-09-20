@@ -10,12 +10,15 @@ import * as productActions from "../../store/actions/products";
 //Components
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import Loading from "../../components/Loading";
+import MySuccess from '../../components/custom/MySuccess';
+import MyError from '../../components/custom/MyError';
 
 //Constants
 import Colors from "../../constants/Colors";
 
 const UserProductsScreen = (props) => {
   const dispatch = useDispatch();
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const userProducts = useSelector((state) => {
@@ -38,10 +41,15 @@ const UserProductsScreen = (props) => {
 
 
   const deleteProduct = useCallback(async (productId) => {
+    setIsSuccess(false);
     setError(null);
     setIsLoading(true);
     try {
       await dispatch(productActions.deleteProduct(productId));
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 500);
     } catch (err) {
       setError(err.message);
     }
@@ -87,6 +95,11 @@ const UserProductsScreen = (props) => {
     )
   }
 
+  if (!isLoading && !error && isSuccess) {
+    return (
+      <MySuccess message="Successfull..." />
+    );
+  }
 
   return (
     <FlatList

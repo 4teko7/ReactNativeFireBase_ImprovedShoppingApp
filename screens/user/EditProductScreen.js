@@ -17,7 +17,9 @@ import * as productActions from "../../store/actions/products";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import MyInput from "../../components/UI/Input";
 import Loading from "../../components/Loading";
-import Colors from '../../constants/Colors';
+import Colors from "../../constants/Colors";
+import MySuccess from '../../components/custom/MySuccess';
+import MyError from '../../components/custom/MyError';
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -49,8 +51,9 @@ const formReducer = (state, action) => {
 
 const EditProductScreen = (props) => {
   const dispatch = useDispatch();
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -92,8 +95,9 @@ const EditProductScreen = (props) => {
       ]);
       return;
     }
+    setIsSuccess(false);
     setIsLoading(true);
-    setError(null)
+    setError(null);
     try {
       await dispatch(
         product
@@ -111,30 +115,41 @@ const EditProductScreen = (props) => {
               formState.inputValues.description
             )
       );
-      props.navigation.goBack();
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        props.navigation.goBack();
+      }, 500);
     } catch (err) {
-      setError("Your Product Couldn't be Added. Please Try Again...")
+      setError("Your Product Couldn't be Added. Please Try Again...");
     }
     setIsLoading(false);
-  }, [dispatch, productId, formState, setIsLoading]);
+  }, [dispatch, productId, formState, setIsLoading, setError]);
 
-  
   useEffect(() => {
     props.navigation.setParams({ submit: onSubmitHandler });
   }, [onSubmitHandler]); //Only Executes One.
 
   if (isLoading)
-    return <Loading info={'Please Wait. Almost Completed...'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
+    return (
+      <Loading
+        info={"Please Wait. Almost Completed..."}
+        textStyle={{ fontSize: 20 }}
+        size={40}
+        color={"green"}
+      />
+    );
 
   if (!isLoading && error) {
     return (
-      <View style={{...styles.centered}}>
-          <View style={{width:"80%",margin:20}}>
-            <Text style={{textAlign:"center",fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>Something Went Wrong ! : {error}</Text>
-          </View>
-          <Button title="try again" color={Colors.primary} onPress={updateAndEditProduct} />
-      </View>
-    )
+      <MyError message={`${error}`} method={onSubmitHandler} />
+    );
+  }
+
+  if (!isLoading && !error && isSuccess) {
+    return (
+      <MySuccess message="Successfull..." />
+    );
   }
 
   return (

@@ -1,19 +1,30 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { View, Text, FlatList, Button, StyleSheet } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import Colors from "../../constants/Colors";
-import CartItem from "../../components/shop/CartItem";
-import * as cartActions from "../../store/actions/cart";
-import * as orderActions from '../../store/actions/orders';
-import Card from '../../components/UI/Card';
-
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
+//REDUX
+import { useSelector, useDispatch } from "react-redux";
+import * as cartActions from "../../store/actions/cart";
+import * as orderActions from "../../store/actions/orders";
+
 //Components
+import Card from "../../components/UI/Card";
+import CartItem from "../../components/shop/CartItem";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
+import Loading from "../../components/Loading";
+import MySuccess from '../../components/custom/MySuccess'
+import MyError from '../../components/custom/MyError'
+
+//Contants
+import Colors from "../../constants/Colors";
 
 const CartScreen = (props) => {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const dispatch = useDispatch();
+
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItems = useSelector((state) => {
     const transformedCartItems = [];
@@ -30,6 +41,48 @@ const CartScreen = (props) => {
       a.productId > b.productId ? 1 : -1
     );
   });
+
+  const orderNow = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    setIsSuccess(false);
+    try {
+      await dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsSuccess(false);
+        props.navigation.goBack();
+        props.navigation.navigate('OrdersScreen');
+      }, 500);
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  }, [setError, setIsLoading, dispatch, cartItems, cartTotalAmount,orderActions]);
+
+  if (isLoading)
+    return (
+      <Loading
+        info={"Please Wait. Almost Completed..."}
+        textStyle={{ fontSize: 20 }}
+        size={40}
+        color={"green"}
+      />
+    );
+
+
+    if (!isLoading && error) {
+      return (
+        <MyError message={`${error}`} method={orderNow} />
+      );
+    }
+  
+    if (!isLoading && !error && isSuccess) {
+      return (
+        <MySuccess message="Successfull..." />
+      );
+    }
+
   return (
     <View style={styles.screen}>
       <Card style={styles.summary}>
@@ -43,10 +96,9 @@ const CartScreen = (props) => {
           title="Order Now"
           disabled={cartItems.length === 0}
           onPress={() => {
-            dispatch(orderActions.addOrder(cartItems, cartTotalAmount))
+            orderNow();
             // props.navigation.navigate('OrdersScreen')
-          }
-          }
+          }}
         />
       </Card>
       <FlatList
@@ -68,11 +120,11 @@ const CartScreen = (props) => {
   );
 };
 
-CartScreen.navigationOptions = navData => {
+CartScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Your Cart"
-  }
-}
+    headerTitle: "Your Cart",
+  };
+};
 
 const styles = StyleSheet.create({
   screen: {
@@ -83,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
-    padding: 10
+    padding: 10,
   },
   summaryText: {
     fontFamily: "Courgette",
@@ -91,6 +143,11 @@ const styles = StyleSheet.create({
   },
   amount: {
     color: Colors.accent,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
