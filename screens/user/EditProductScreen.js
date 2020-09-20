@@ -142,7 +142,7 @@ const EditProductScreen = (props) => {
 
   if (!isLoading && error) {
     return (
-      <MyError message={`${error}`} method={onSubmitHandler} />
+      <MyError message={`${error}`} method={onSubmitHandler} setError={setError} />
     );
   }
 

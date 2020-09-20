@@ -75,24 +75,13 @@ const UserProductsScreen = (props) => {
   };
 
 
-
-
-
-
-
   if (isLoading)
     return <Loading info={'Please Wait. Process is almost completed...'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
 
-
   if (!isLoading && error) {
     return (
-      <View style={{...styles.centered}}>
-          <View style={{width:"80%",margin:20}}>
-            <Text style={{textAlign:"center",fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>Something Went Wrong ! : {error}</Text>
-          </View>
-          <Button title="try again" color={Colors.primary} onPress={deleteProduct} />
-      </View>
-    )
+      <MyError message={`${error}`} method={deleteProduct} setError={setError} />
+    );
   }
 
   if (!isLoading && !error && isSuccess) {
