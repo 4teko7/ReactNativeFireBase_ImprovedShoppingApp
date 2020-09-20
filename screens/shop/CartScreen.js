@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, Text, FlatList, Button, StyleSheet } from "react-native";
+import { View, Text, FlatList, Button, StyleSheet,ActivityIndicator } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 //REDUX
@@ -60,20 +60,11 @@ const CartScreen = (props) => {
     setIsLoading(false);
   }, [setError, setIsLoading, dispatch, cartItems, cartTotalAmount,orderActions]);
 
-  if (isLoading)
-    return (
-      <Loading
-        info={"Please Wait. Almost Completed..."}
-        textStyle={{ fontSize: 20 }}
-        size={40}
-        color={"green"}
-      />
-    );
 
 
     if (!isLoading && error) {
       return (
-        <MyError message={`${error}`} method={orderNow} />
+        <MyError message={`${error}`} method={orderNow} setError={setError}/>
       );
     }
   
@@ -92,14 +83,19 @@ const CartScreen = (props) => {
             ${(cartTotalAmount.toFixed(2) * 1000) / 1000}
           </Text>
         </Text>
-        <Button
-          title="Order Now"
-          disabled={cartItems.length === 0}
-          onPress={() => {
-            orderNow();
-            // props.navigation.navigate('OrdersScreen')
-          }}
-        />
+        {
+          isLoading
+          ? 
+            <ActivityIndicator size={30} color = {'green'} />
+          :
+            <Button
+              title="Order Now"
+              disabled={cartItems.length === 0}
+              onPress={() => {
+                orderNow();
+              }}
+            />
+        }
       </Card>
       <FlatList
         data={cartItems}

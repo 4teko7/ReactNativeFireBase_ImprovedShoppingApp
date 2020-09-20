@@ -16,6 +16,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import Loading from "../../components/Loading";
+import MyError from '../../components/custom/MyError';
 
 //Constants
 import Colors from "../../constants/Colors";
@@ -25,7 +26,7 @@ import * as cartActions from "../../store/actions/cart";
 import * as productActions from "../../store/actions/products";
 
 const ProductsOverviewScreen = (props) => {
-  const [areProductsLoaded, setAreProductsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.availableProducts);
@@ -33,14 +34,14 @@ const ProductsOverviewScreen = (props) => {
 
   const loadProducts = useCallback(async () => {
     setError(null);
-    setAreProductsLoaded(false);
+    setIsLoading(false);
     try {
       await dispatch(productActions.fetchProducts());
     } catch (err) {
       setError(err.message);
     }
-    setAreProductsLoaded(true);
-  },[dispatch,setAreProductsLoaded,setError]);
+    setIsLoading(true);
+  },[dispatch,setIsLoading,setError]);
 
   useEffect(() => {
     loadProducts();
@@ -64,21 +65,16 @@ const ProductsOverviewScreen = (props) => {
     });
   };
 
-  if (!areProductsLoaded)
+  if (!isLoading)
     return <Loading info={'Please Wait. Products are almost ready'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
 
   if (error) {
     return (
-      <View style={{...styles.centered}}>
-          <View style={{width:"80%",margin:20}}>
-            <Text style={{textAlign:"center",fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>Something Went Wrong ! : {error}</Text>
-          </View>
-          <Button title="try again" color={Colors.primary} onPress={loadProducts} />
-      </View>
+      <MyError message={`${error}`} method={loadProducts} setError={setError} />
     )
   }
 
-  if (areProductsLoaded && products.length === 0)
+  if (isLoading && products.length === 0)
     return (
         <View style={{ ...styles.centered}}>
           <Text style={{fontFamily:"Courgette",color:'red',fontWeight:'bold'}}>No Products Found ! Maybe Start Adding Some Products...</Text>
