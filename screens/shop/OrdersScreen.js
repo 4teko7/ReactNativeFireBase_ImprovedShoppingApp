@@ -14,6 +14,7 @@ import MyError from '../../components/custom/MyError';
 
 const OrdersScreen = (props) => {
   const [isLoading,setIsLoading] = useState(false);
+  const [isRefreshing,setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.orders.orders);
@@ -22,18 +23,21 @@ const OrdersScreen = (props) => {
 
   const loadOrders = useCallback(async () => {
     setError(null);
-    setIsLoading(false);
+    setIsRefreshing(true);
     try {
       await dispatch(ordersActions.fetchOrders());
     } catch (err) {
       setError(err.message);
     }
-    setIsLoading(true);
-  },[dispatch,setIsLoading,setError]);
+    setIsRefreshing(false);
+  },[dispatch,setIsRefreshing,setError]);
 
   useEffect(() => {
-    loadOrders();
-  }, [dispatch,loadOrders]);
+    setIsLoading(true);
+    loadOrders().finally(()=>{
+      setIsLoading(false);
+    });
+  }, [dispatch,loadOrders,setIsLoading]);
 
   useEffect(() => {
     const willFocusListener = props.navigation.addListener('willFocus',()=> {
@@ -47,7 +51,7 @@ const OrdersScreen = (props) => {
   },[loadOrders])
 
 
-  if (!isLoading)
+  if (isLoading)
     return <Loading info={'Please Wait. Orders are almost ready'} textStyle={{ fontSize: 20 }} size={40} color={"green"} />;
 
   if (error) {
@@ -59,6 +63,8 @@ const OrdersScreen = (props) => {
 
   return (
     <FlatList
+      onRefresh={loadOrders}
+      refreshing={isRefreshing}
       data={orders}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
